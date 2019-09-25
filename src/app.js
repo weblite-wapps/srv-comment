@@ -34,6 +34,9 @@ const routerHandler = require("./router");
 const router = new Router();
 routerHandler(router);
 
+app.use(router.routes());
+app.use(router.allowedMethods());
+
 const port = 3003;
 const server = app.listen(port);
 

@@ -17,7 +17,6 @@ module.exports = router => {
     const { contextId } = ctx.request.query;
     const docs = await getCommentsByContextId(contextId);
 
-    console.log("docs:", docs);
     ctx.body = docs;
   });
 };
