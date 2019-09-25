@@ -37,7 +37,7 @@ routerHandler(router);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const port = 3003;
+const port = 5110;
 const server = app.listen(port);
 
 module.exports = server;
