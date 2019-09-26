@@ -1,43 +1,26 @@
 // app
-const koa = require("koa");
-const app = new koa();
+const koa = require('koa')
+const app = new koa()
+// const cors = require('@koa/cors')
+const bodyParser = require('koa-bodyparser')
+const Router = require('@koa/router')
 
-// cors
-const cors = require("@koa/cors");
-app.use(
-  cors({
-    // origin: 'https://www.weblite.me:3000'
-  })
-);
+const routerHandler = require('./router')
+const database = require('./database/dbConnector')
 
-// bodyParser
-const bodyParser = require("koa-bodyparser");
-app.use(bodyParser());
+database.connect('comments_db')
 
-// db
-const database = require("./database/dbConnector");
-database.connect("comments_db");
+// app.use(
+//   cors({
+//     origin: 'https://www.weblite.me:3000',
+//   }),
+// )
+app.use(bodyParser())
 
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (error) {
-    ctx.status = error.status || 500;
-    ctx.body = error.message;
-  }
-});
+const router = new Router()
+routerHandler(router)
 
-// router
-const Router = require("@koa/router");
-const routerHandler = require("./router");
+app.use(router.routes())
+  .use(router.allowedMethods())
 
-const router = new Router();
-routerHandler(router);
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-const port = 5110;
-const server = app.listen(port);
-
-module.exports = server;
+app.listen(5110, () => console.log('> server successfully started!'))
