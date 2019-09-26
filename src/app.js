@@ -1,7 +1,7 @@
 // app
 const koa = require('koa')
 const app = new koa()
-// const cors = require('@koa/cors')
+const cors = require('@koa/cors')
 const bodyParser = require('koa-bodyparser')
 const Router = require('@koa/router')
 
@@ -10,11 +10,9 @@ const database = require('./database/dbConnector')
 
 database.connect('comments_db')
 
-// app.use(
-//   cors({
-//     origin: 'https://www.weblite.me:3000',
-//   }),
-// )
+app.use(
+  cors(),
+)
 app.use(bodyParser())
 
 const router = new Router()
