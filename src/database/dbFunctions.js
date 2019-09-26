@@ -1,13 +1,15 @@
-const { Comment } = require("./dbModel");
+const { Comment } = require('./dbModel')
 
-exports.createComment = ({ contextId, body, date, writerId, wisId }) =>
+exports.createComment = ({ contextId, body, writerId, wisId }) =>
   Comment.create({
     contextId,
     body,
-    date,
     writerId,
-    wisId
-  });
+    wisId,
+  })
 
-exports.getCommentsByContextId = contextId =>
-  Comment.find({ contextId }).lean();
+exports.getCommentsByContextId = (wisId, contextId) =>
+  Comment.find({ wisId, contextId }).sort({ date: -1 }).lean()
+
+exports.getCountByContextId = (wisId, contextId) =>
+  Comment.countDocuments({ wisId, contextId })

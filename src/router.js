@@ -1,22 +1,28 @@
 // db functions
 const {
   createComment,
-  getCommentsByContextId
-} = require("./database/dbFunctions");
+  getCommentsByContextId,
+  getCountByContextId,
+} = require('./database/dbFunctions')
 
 module.exports = router => {
-  router.post("/createComment", async ctx => {
-    const requestBody = ctx.request.body;
-    requestBody.date = requestBody.date || Date.now();
+  router.post('/createComment', async ctx => {
+    const comment = ctx.request.body
+    if (!comment.wisId || comment.contextId == null)
+      return ctx.status = 400
 
-    const doc = await createComment(requestBody);
-    ctx.body = doc;
-  });
+    comment.date = comment.date || Date.now()
 
-  router.get("/contextComments", async ctx => {
-    const { contextId } = ctx.request.query;
-    const docs = await getCommentsByContextId(contextId);
+    ctx.body = await createComment(comment)
+  })
 
-    ctx.body = docs;
-  });
-};
+  router.get('/contextComments', async ctx => {
+    const { wisId, contextId } = ctx.request.query
+    ctx.body = await getCommentsByContextId(wisId, contextId)
+  })
+
+  router.get('/countComments', async ctx => {
+    const { wisId, contextId } = ctx.request.query
+    ctx.body = await getCountByContextId(wisId, contextId)
+  })
+}

@@ -6,9 +6,10 @@ const { Schema } = mongoose;
 const CommentSchema = new Schema({
   contextId: String,
   body: String,
-  date: { type: Date, default: Date.now },
   writerId: String,
-  wisId: String
-});
+  wisId: Schema.Types.ObjectId
+}, { timestamps: true });
+
+CommentSchema.index({ wisId: 1, contextId: 1, date: -1 })
 
 exports.Comment = mongoose.model("Comment", CommentSchema);
