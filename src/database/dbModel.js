@@ -8,7 +8,7 @@ const CommentSchema = new Schema({
   body: String,
   writerId: String,
   wisId: Schema.Types.ObjectId
-}, { timestamps: true });
+}, { versionKey: false, timestamps: true });
 
 CommentSchema.index({ wisId: 1, contextId: 1, date: -1 })
 
